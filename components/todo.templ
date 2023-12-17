@@ -1,0 +1,18 @@
+package components
+
+templ TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.SafeURL) {
+  <li class={templ.KV("completed", todo.State == "completed"), templ.KV("editing", todo.ID == editID)}>
+    <div class="view">
+      <form action={preserveQueryParams("/todos/" + todo.ID)} method="POST">
+        <button type="submit" class={"toggle-btn", templ.KV("toggle-btn-checked", todo.State == "completed")}></button>
+      </form>
+      <label id={todo.ID} ondblclick="Turbo.visit('/todos/' + this.id)">{todo.Text}</label>
+      <form action={preserveQueryParams("/todos/" + todo.ID + "/destroy")} method="POST">
+        <button type="submit" class="destroy"></button>
+      </form>
+    </div>
+    <form action={preserveQueryParams("/todos/" + todo.ID)} method="POST">
+      <input class="edit" name="text" value={todo.Text}/>
+    </form>
+  </li>
+}
