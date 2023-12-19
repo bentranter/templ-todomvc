@@ -12,7 +12,9 @@ templ TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ
       </form>
     </div>
     <form action={preserveQueryParams("/todos/" + todo.ID)} method="POST">
-      <input class="edit" name="text" value={todo.Text}/>
+      if todo.ID == editID {
+        <input class="edit" name="text" value={todo.Text} autofocus/>
+      }
     </form>
   </li>
 }

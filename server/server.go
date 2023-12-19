@@ -4,11 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/bentranter/templ-todomvc/components"
 	"github.com/jba/muxpatterns"
 )
-
-var state = []components.Todo{}
 
 func Start() {
 	mux := muxpatterns.NewServeMux()
@@ -21,7 +18,7 @@ func Start() {
 	mux.HandleFunc("POST /todos/clear", TodoClearCompletedHandler)
 	mux.HandleFunc("POST /todos/select", TodoSelectAllHandler)
 
-	mux.HandleFunc("GET /css/app.css", RenderFileHandler)
+	mux.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("./css"))))
 	mux.Handle("/node_modules/", http.StripPrefix("/node_modules/", http.FileServer(http.Dir("./node_modules"))))
 
 	fmt.Println("Listening on :3000")

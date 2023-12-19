@@ -49,7 +49,22 @@ func Page(props PageProps) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"post\"><input name=\"todo\" class=\"new-todo\" placeholder=\"What needs to be done?\" autofocus></form></header><!--")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"post\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if props.ShouldAutofocus {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input name=\"todo\" class=\"new-todo\" placeholder=\"What needs to be done?\" autofocus>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input name=\"todo\" class=\"new-todo\" placeholder=\"What needs to be done?\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form></header><!--")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -8,7 +8,11 @@ templ Page(props PageProps) {
 			<header class="header">
 				<h1>todos</h1>
         <form action={props.PreserveQueryParams("/todos")} method="post">
-				  <input name="todo" class="new-todo" placeholder="What needs to be done?" autofocus/>
+          if props.ShouldAutofocus {
+				    <input name="todo" class="new-todo" placeholder="What needs to be done?" autofocus/>
+          } else {
+            <input name="todo" class="new-todo" placeholder="What needs to be done?"/>
+          }
         </form>
 			</header>
 			<!-- This section should be hidden by default and shown when there are todos -->
