@@ -150,11 +150,23 @@ func TodoDestroyHandler(w http.ResponseWriter, r *http.Request) {
 
 func TodoClearCompletedHandler(w http.ResponseWriter, r *http.Request) {
 	sd := getSessionData(r)
-	for i, todo := range sd.Todos {
+
+	// Find all of the todos that are deleted and therefore must be deleted.
+	completedTodoIDs := make([]string, 0)
+	for _, todo := range sd.Todos {
 		if todo.State == "completed" {
-			sd.Todos = append(sd.Todos[:i], sd.Todos[i+1:]...)
+			completedTodoIDs = append(completedTodoIDs, todo.ID)
 		}
 	}
+	// Iterate over the list and delete the completed todos from the list.
+	for _, completedTodoID := range completedTodoIDs {
+		for i, todo := range sd.Todos {
+			if todo.ID == completedTodoID {
+				sd.Todos = append(sd.Todos[:i], sd.Todos[i+1:]...)
+			}
+		}
+	}
+
 	sd.ShouldAutofocus = false
 	saveSessionData(w, r, sd)
 	redirect(w, r, "/")
