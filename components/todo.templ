@@ -1,20 +1,29 @@
 package components
 
 templ TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.SafeURL) {
-  <li class={templ.KV("completed", todo.State == "completed"), templ.KV("editing", todo.ID == editID)}>
-    <div class="view">
-      <form action={preserveQueryParams("/todos/" + todo.ID)} method="POST">
-        <button type="submit" class={"toggle-btn", templ.KV("toggle-btn-checked", todo.State == "completed")}></button>
-      </form>
-      <label id={todo.ID} ondblclick="Turbo.visit('/todos/' + this.id)">{todo.Text}</label>
-      <form action={preserveQueryParams("/todos/" + todo.ID + "/destroy")} method="POST">
-        <button type="submit" class="destroy"></button>
-      </form>
-    </div>
-    <form action={preserveQueryParams("/todos/" + todo.ID)} method="POST">
+  <turbo-frame id={"todo_" + todo.ID}>
+    <li class={templ.KV("completed", todo.State == "completed"), templ.KV("editing", todo.ID == editID)}>
+      <div class="view">
+        <form action={preserveQueryParams("/todos/" + todo.ID)} data-turbo-frame="todos" method="POST">
+          <button type="submit" class={"toggle-btn", templ.KV("toggle-btn-checked", todo.State == "completed")}></button>
+        </form>
+        <label id={todo.ID} ondblclick="document.querySelector('#' + this.id + 'navigateEdit').requestSubmit()">{todo.Text}</label>
+
+        <form action={preserveQueryParams("/todos/" + todo.ID + "/destroy")} data-turbo-frame="todos" method="POST">
+          <button type="submit" class="destroy"></button>
+        </form>
+      </div>
+
       if todo.ID == editID {
-        <input class="edit" name="text" value={todo.Text} autofocus/>
+        <form action={preserveQueryParams("/todos/" + todo.ID)} method="POST">
+          <input id="todo-edit" class="edit" name="text" value={todo.Text} onfocusout="document.querySelector('#navigateHome').requestSubmit()" autofocus/>
+        </form>
+
+        // Hidden form for Turbo navigation from edit page.
+        <form id="navigateHome" action={preserveQueryParams("/")} method="GET"></form>
       }
-    </form>
-  </li>
+      // Hidden form for Turbo navigation to edit page.
+      <form id={todo.ID + "navigateEdit"} action={preserveQueryParams("/todos/"+todo.ID)} method="GET"></form>
+    </li>
+  </turbo-frame>
 }

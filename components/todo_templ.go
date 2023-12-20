@@ -23,6 +23,18 @@ func TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<turbo-frame id=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("todo_" + todo.ID))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		var templ_7745c5c3_Var2 = []any{templ.KV("completed", todo.State == "completed"), templ.KV("editing", todo.ID == editID)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
@@ -45,7 +57,7 @@ func TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"POST\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" data-turbo-frame=\"todos\" method=\"POST\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -70,7 +82,7 @@ func TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" ondblclick=\"Turbo.visit(&#39;/todos/&#39; + this.id)\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" ondblclick=\"document.querySelector(&#39;#&#39; + this.id + &#39;navigateEdit&#39;).requestSubmit()\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -88,21 +100,21 @@ func TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"POST\"><button type=\"submit\" class=\"destroy\"></button></form></div><form action=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var7 templ.SafeURL = preserveQueryParams("/todos/" + todo.ID)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var7)))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"POST\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" data-turbo-frame=\"todos\" method=\"POST\"><button type=\"submit\" class=\"destroy\"></button></form></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if todo.ID == editID {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<input class=\"edit\" name=\"text\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form action=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var7 templ.SafeURL = preserveQueryParams("/todos/" + todo.ID)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var7)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"POST\"><input id=\"todo-edit\" class=\"edit\" name=\"text\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -110,12 +122,38 @@ func TodoRow(todo Todo, editID string, preserveQueryParams func(s string) templ.
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" autofocus>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" onfocusout=\"document.querySelector(&#39;#navigateHome&#39;).requestSubmit()\" autofocus></form> <form id=\"navigateHome\" action=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var8 templ.SafeURL = preserveQueryParams("/")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var8)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"GET\"></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</form></li>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(todo.ID + "navigateEdit"))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" action=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var9 templ.SafeURL = preserveQueryParams("/todos/" + todo.ID)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var9)))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" method=\"GET\"></form></li></turbo-frame>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
