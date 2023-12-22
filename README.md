@@ -1,6 +1,6 @@
 # `templ-todomvc`
 
-An implementation of TodoMVC using Go and [templ](https://github.com/a-h/templ).
+An implementation of TodoMVC using [templ](https://github.com/a-h/templ) and [Turbo](https://turbo.hotwired.dev/).
 
 ### Development
 
